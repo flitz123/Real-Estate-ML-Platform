@@ -1,5 +1,5 @@
 import pandas as pd
-import sqlalchemy as create_engine
+from sqlalchemy import create_engine
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor

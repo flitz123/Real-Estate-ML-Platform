@@ -21,6 +21,8 @@ params = {
     "learning_rate": [0.01, 0.1]
 }
 
+grid = GridSearchCV(model, params, cv=5, scoring="neg_mean_absolute_error")
+grid.fit(X_train, y_train)
 best_model = grid.best_estimator_
 preds = best_model.predict(X_test)
 mae = mean_absolute_error(y_test, preds)
