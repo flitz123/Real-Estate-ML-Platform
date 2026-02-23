@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 engine = create_engine(
-    "postgresql://postgres:yourpassword@localhost:5432/market_intelligence")
+    "postgresql://postgres:postdb12@localhost:5432/market_intelligence")
 df = pd.read_sql("SELECT listing_date, price FROM properties_clean", engine)
 
 df["listing_date"] = pd.to_datetime(df["listing_date"])

@@ -5,7 +5,7 @@ import pandas as pd
 class DatabaseManager:
     def __init__(self):
         self.engine = create_engine(
-            "postgresql://postgres:yourpassword@localhost:5432/market_intelligence"
+            "postgresql://postgres:postdb12@localhost:5432/market_intelligence"
         )
 
     def insert_database(self, df, table_name):

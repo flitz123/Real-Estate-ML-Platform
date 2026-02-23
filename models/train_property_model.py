@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
 engine = create_engine(
-    "postgresql://postgres:yourpassword@localhost:5432/market_intelligence")
+    "postgresql://postgres:postdb12@localhost:5432/market_intelligence")
 df = pd.read_sql("SELECT * FROM properties_clean", engine)
 
 X = df.drop(["price", "property_id", "title", "listing_date"], axis=1)
