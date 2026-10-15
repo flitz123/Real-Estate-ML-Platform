@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f4">
+    <meta name="description" content="Kenyan property market intelligence and machine-learning price estimates.">
+    <title>Mtaa — Property intelligence</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="/" aria-label="Mtaa home">
+          <span class="brand-mark">M</span>
+          <span class="brand-copy"><strong>mtaa</strong><small>PROPERTY INTELLIGENCE</small></span>
+        </a>
+        <div class="workspace-label">WORKSPACE</div>
+        <nav class="side-nav" aria-label="Main navigation">
+          <a class="nav-link active" href="#overview"><span class="nav-icon">⌂</span>Overview</a>
+          <a class="nav-link" href="#estimator"><span class="nav-icon">⌁</span>Price estimator</a>
+          <a class="nav-link" href="#market"><span class="nav-icon">▥</span>Market insights</a>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="source-card">
+            <span class="source-dot"></span>
+            <div><strong>Demo market</strong><small>Simulated Kenyan listings</small></div>
+          </div>
+          <div class="profile-row">
+            <span class="avatar">MI</span>
+            <span><strong>Market intelligence</strong><small>Local workspace</small></span>
+            <span class="profile-menu" aria-hidden="true">···</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="breadcrumb"><span>Workspace</span><b>/</b><strong>Overview</strong></div>
+          <div class="topbar-actions">
+            <span class="today-label"><span class="live-dot"></span>Market data <span id="updated-label">not synced</span></span>
+            <button class="button button-dark button-small" id="sync-button" type="button">
+              <span class="sync-icon" aria-hidden="true">↻</span> Import demo listings
+            </button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <section class="welcome-row" id="overview">
+            <div>
+              <div class="eyebrow">KENYA · PROPERTY MARKET</div>
+              <h1>Know what a home is worth.</h1>
+              <p class="subtitle">A clearer view of the market, powered by property data and machine learning.</p>
+            </div>
+            <div class="welcome-mark" aria-hidden="true">
+              <div class="sun"></div><div class="building building-back"></div><div class="building building-front"></div>
+            </div>
+          </section>
+
+          <section class="stats-grid" aria-label="Market overview">
+            <article class="stat-card">
+              <div class="stat-top"><span>Listings tracked</span><span class="stat-icon icon-green">⌂</span></div>
+              <div class="stat-value" id="listings-count">—</div>
+              <div class="stat-foot"><span class="status-pill" id="listing-status">Waiting for data</span></div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Average asking price</span><span class="stat-icon icon-yellow">KSh</span></div>
+              <div class="stat-value stat-currency" id="average-price">—</div>
+              <div class="stat-foot">Across all imported listings</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Median asking price</span><span class="stat-icon icon-lilac">↗</span></div>
+              <div class="stat-value stat-currency" id="median-price">—</div>
+              <div class="stat-foot">A midpoint less affected by outliers</div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-top"><span>Areas covered</span><span class="stat-icon icon-blue">◎</span></div>
+              <div class="stat-value" id="area-count">—</div>
+              <div class="stat-foot" id="area-caption">Nairobi, Mombasa &amp; more</div>
+            </article>
+          </section>
+
+          <section class="content-grid" id="market">
+            <article class="panel chart-panel">
+              <div class="panel-heading">
+                <div><div class="eyebrow">LOCAL SNAPSHOT</div><h2>Prices by area</h2></div>
+                <span class="panel-tag">Average · KES</span>
+              </div>
+              <div id="area-chart" class="area-chart">
+                <div class="empty-chart"><span class="empty-icon">▥</span><strong>Your market snapshot starts here</strong><span>Import demo listings to compare average asking prices by area.</span></div>
+              </div>
+              <div class="chart-footer"><span><i class="legend-dot"></i>Average asking price</span><span>Illustrative data · Not a live valuation index</span></div>
+            </article>
+            <article class="panel estimator-card" id="estimator">
+              <div class="panel-heading">
+                <div><div class="eyebrow">MACHINE-LEARNING TOOL</div><h2>Estimate a property</h2></div>
+                <span class="spark-icon">✳</span>
+              </div>
+              <p class="panel-description">Get a quick price estimate from the property details.</p>
+              <form id="prediction-form">
+                <div class="form-grid">
+                  <label>Location
+                    <select name="location" required>
+                      <option value="Nairobi">Nairobi</option>
+                      <option value="Mombasa">Mombasa</option>
+                      <option value="Nakuru">Nakuru</option>
+                      <option value="Kisumu">Kisumu</option>
+                      <option value="Eldoret">Eldoret</option>
+                    </select>
+                  </label>
+                  <label>Floor area <span class="field-unit">m²</span>
+                    <input name="square_meters" type="number" min="1" max="100000" value="120" required>
+                  </label>
+                  <label>Bedrooms
+                    <select name="bedrooms">
+                      <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option>
+                    </select>
+                  </label>
+                  <label>Bathrooms
+                    <select name="bathrooms">
+                      <option>1</option><option selected>2</option><option>3</option><option>4</option>
+                    </select>
+                  </label>
+                </div>
+                <button class="button button-primary estimate-button" id="estimate-button" type="submit">Estimate property value <span aria-hidden="true">→</span></button>
+                <div class="estimate-result" id="estimate-result" aria-live="polite">
+                  <span class="result-label">YOUR ESTIMATE</span>
+                  <strong id="estimate-value">—</strong>
+                  <small id="estimate-note">Import demo listings to train the model.</small>
+                </div>
+              </form>
+            </article>
+          </section>
+
+          <section class="panel listings-panel">
+            <div class="panel-heading listings-heading">
+              <div><div class="eyebrow">MARKET INVENTORY</div><h2>Recent listings</h2></div>
+              <label class="search-box"><span aria-hidden="true">⌕</span><input id="listing-search" type="search" placeholder="Search listings" aria-label="Search listings"></label>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th>PROPERTY</th><th>LOCATION</th><th>DETAILS</th><th>ASKING PRICE</th><th>PRICE / M²</th></tr></thead>
+                <tbody id="listing-rows"><tr class="empty-row"><td colspan="5">No listings yet. Import demo listings to explore the market.</td></tr></tbody>
+              </table>
+            </div>
+            <nav class="pagination" id="listing-pagination" aria-label="Listing pages"></nav>
+            <div class="listings-footer"><span id="listing-count-caption">Showing 0 listings</span><span>Demo data is simulated for product exploration</span></div>
+          </section>
+          <footer class="page-footer"><span>MTAA PROPERTY INTELLIGENCE</span><span>Estimates are informational and are not professional valuations.</span></footer>
+        </div>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
