@@ -100,6 +100,14 @@ function renderMarket(market) {
     ? `${market.model_ready ? "Model ready" : "Listings imported"}`
     : "Waiting for data";
   elements.updated.textContent = market.total_listings ? "synced" : "not synced";
+  const syncEnabled = market.sync_enabled !== false;
+  elements.syncButton.disabled = !syncEnabled;
+  elements.syncButton.title = syncEnabled
+    ? ""
+    : "Vercel deployments use a read-only demo dataset. Update the data and model, then redeploy.";
+  elements.syncButton.innerHTML = syncEnabled
+    ? '<span class="sync-icon" aria-hidden="true">↻</span> Import demo listings'
+    : '<span class="sync-icon" aria-hidden="true">✓</span> Demo data · read only';
   allListings = market.listings || [];
   currentPage = 1;
   renderChart(market.price_by_location || []);

@@ -35,6 +35,25 @@ def sample_properties(count=12):
 
 
 class WorkflowTests(unittest.TestCase):
+    def test_bundled_demo_data_and_model_are_ready(self):
+        health = main.health()
+        market = main.market()
+        self.assertTrue(health["model_ready"])
+        self.assertTrue(health["market_data_ready"])
+        self.assertGreater(market["total_listings"], 0)
+        self.assertEqual(len(market["listings"]), market["total_listings"])
+        prediction = main.predict(
+            main.PredictionRequest(
+                location="Nairobi",
+                bedrooms=3,
+                bathrooms=2,
+                square_meters=120,
+                rating=4.2,
+                stock=12,
+            )
+        )
+        self.assertGreater(prediction["predicted_price"], 0)
+
     def test_scraper_paginates_using_products_returned(self):
         scraper = PropertyAPIScraper(limit=2)
         pages = [
@@ -139,6 +158,14 @@ class WorkflowTests(unittest.TestCase):
                     )
             self.assertEqual(raised.exception.status_code, 503)
             self.assertIn("Import demo listings", raised.exception.detail)
+
+    def test_market_refresh_is_disabled_for_serverless_deployments(self):
+        with patch.object(main, "SYNC_ENABLED", False):
+            self.assertFalse(main.health()["sync_enabled"])
+            with self.assertRaises(HTTPException) as raised:
+                main.sync_market()
+        self.assertEqual(raised.exception.status_code, 503)
+        self.assertIn("temporary", raised.exception.detail)
 
 
 if __name__ == "__main__":

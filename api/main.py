@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Literal
 
 import joblib
+import os
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -16,6 +17,7 @@ from scraper.property_api_scraper import PropertyAPIScraper
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = PROJECT_ROOT / "frontend"
+SYNC_ENABLED = os.getenv("VERCEL") != "1"
 app = FastAPI(
     title="Mtaa — Property Intelligence",
     description="Kenyan property market insights and price estimates.",
@@ -66,6 +68,7 @@ def health():
         "status": "ok",
         "model_ready": MODEL_PATH.is_file(),
         "market_data_ready": RAW_DATA_PATH.is_file(),
+        "sync_enabled": SYNC_ENABLED,
     }
 
 
@@ -83,6 +86,7 @@ def market():
             "listings": [],
             "model_ready": MODEL_PATH.is_file(),
             "mae": None,
+            "sync_enabled": SYNC_ENABLED,
         }
 
     for column in ("price", "square_meters"):
@@ -136,11 +140,20 @@ def market():
         "listings": listings.to_dict(orient="records"),
         "model_ready": MODEL_PATH.is_file(),
         "mae": float(mae) if mae is not None else None,
+        "sync_enabled": SYNC_ENABLED,
     }
 
 
 @app.post("/api/market/sync")
 def sync_market():
+    if not SYNC_ENABLED:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Market refresh is disabled on Vercel because serverless filesystems "
+                "are temporary. Update the demo dataset and model, then redeploy."
+            ),
+        )
     try:
         scraped = PropertyAPIScraper().scrape()
         transform_property_data()
