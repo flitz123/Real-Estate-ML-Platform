@@ -14,10 +14,10 @@ Importing refreshed listings needs an internet connection to `dummyjson.com`. On
 
 ## Deploy to Vercel
 
-The repository is configured for Vercel's FastAPI/Python runtime. The `pyproject.toml` selects `api.main:app`, Vercel serves the dashboard's `/static` assets through its CDN, and `vercel.json` explicitly includes the demo CSVs and trained model in the function bundle. Python 3.12 and pinned dependencies keep the serialized estimator compatible at runtime.
+The repository is configured for Vercel's FastAPI/Python runtime. The `pyproject.toml` selects `api.main:app` and declares the pinned runtime dependencies, matching `requirements.txt` for local installs. Vercel serves the dashboard's `/static` assets through its CDN, and `vercel.json` explicitly includes the demo CSVs and trained model in the function bundle. Python 3.12 and pinned dependencies keep the serialized estimator compatible at runtime.
 
 1. Import this repository into Vercel, or install the Vercel CLI and run `vercel` from the repository root.
-2. Keep the project root at the repository root. Leave the Build Command and Output Directory unset; Vercel detects the FastAPI app and installs `requirements.txt`.
+2. Keep the project root at the repository root. Leave the Build Command and Output Directory unset; Vercel detects the FastAPI app and installs the pinned dependencies declared in `pyproject.toml`.
 3. Deploy with `vercel --prod` or enable Git deployments in the Vercel project.
 4. Check `/api/health` on the deployed URL. The bundled demo data and trained model are available immediately.
 
